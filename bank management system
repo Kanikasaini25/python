@@ -1,0 +1,100 @@
+import sys
+import mysql.connector
+con=mysql.connector.connect(host="localhost",user="root",password="kanak@25",database="bank")
+cur=con.cursor()
+print("*********welcome in sbi**********")
+print("press 1 for deposit:")
+print("press 2 for withdraw:")
+print("press 3 for check balance:")
+print("press 4 for transfer:")
+print("press 5 for quit:")
+print("press 6 for create new account:")
+n=int(input(" enter task:"))
+if n==1:
+    acc=input("enter your account number:")
+    pin=input("enter your pin:")
+    query="select * from bank where accno={} and pin='{}'".format(acc,pin)
+    cur.execute(query)
+    data=cur.fetchone()
+    if not data:
+        print("enter valid account and pin")
+    else:
+        a=int(input("enter your deposit amount:"))
+        bal=data[3]+a
+        query="update bank set bal={} where accno={}".format (bal,acc)
+        cur.execute(query)
+        con.commit()
+        print("your amount is deposite......")
+
+if n==2:
+    acc=input("enter your account number:")
+    pin=input("enter your pin:")
+    query="select * from bank where accno={} and pin='{}'".format(acc,pin)
+    cur.execute(query)
+    data=cur.fetchone()
+    if not data:
+        print("enter valid account and pin")
+    else:
+        a=int(input("enter your withdraw amount:"))
+        bal=data[3]-a
+        query="update bank set bal={} where accno={}".format (bal,acc)
+        cur.execute(query)
+        con.commit()
+        print("your amount is withdraw ......")
+if n==3:
+    acc=input("enter your account number:")
+    pin=input("enter your pin:")
+    query="select * from bank where accno={} and pin='{}'".format(acc,pin)
+    cur.execute(query)
+    data=cur.fetchone()
+    if not data:
+        print("enter valid account and pin")
+    else:
+        print( "your balance",data[3])
+if n==5:
+    sys.exit()
+if n==4:
+    acc=input("enter your account number:")
+    pin=input("enter your pin:")
+    query="select * from bank where accno={} and pin='{}'".format(acc,pin)
+    cur.execute(query)
+    data1=cur.fetchone()
+    if not data1:
+        print("enter valid account and pin")
+    else:
+        ac=input("enter  account number:")
+        name=input("enter the name:")
+        query="select * from bank where accno={} and name='{}'".format(ac,name)
+        cur.execute(query)
+        data2=cur.fetchone()
+        if not data2:
+              print("enter valid account and pin")
+        else:
+            a=int(input("enter your deposit amount:"))
+            bal=data1[3]- a
+            query="update bank set bal={} where accno={}".format (bal,ac)
+            cur.execute(query)
+            con.commit()
+            bal=data2[3]+a
+            query="update bank set bal={} where name='{}'".format (bal,name)
+            cur.execute(query)
+            con.commit()
+            print("your amount is  transfer")
+if n==6:
+    name=input("enter your name:")
+    acc=int(input("enter your account no:"))
+    pin=int(input("enter your pin:"))
+    amt=int(input("enter amount:"))
+    query=("insert into bank(accno,name, pin,bal)"
+           "values(%s,%s,%s,%s)"
+           )
+    data=(acc,name,pin,amt)
+    cur.execute(query,data)
+    con.commit()
+    con.close()
+    print("your account is created successfully")
+    
+
+    
+    
+        
